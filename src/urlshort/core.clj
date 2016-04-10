@@ -7,7 +7,8 @@
             [hiccup.core :as hiccup]
             [clojure.data.json :as json]
             [environ.core :refer [env]]
-            [org.httpkit.server :refer [run-server]]))
+            [org.httpkit.server :refer [run-server]])
+  (:import org.apache.commons.validator.UrlValidator))
 
 ;; stored has {url hash} but both would work normally since both
 ;; should be unique
@@ -22,17 +23,22 @@
 (defn valid-url?
   "Returns true or false if url is a valid url"
   [url]
-  true)
+  (.isValid (UrlValidator. (into-array ["http" "https"])) url))
 
 (defn route-url [url]
   (let [short ((urlstore/lookup-url url store) url)
         short (if (and (valid-url? url) (nil? short))
                 (save-hash! store url (urlhash/hash url store))
                 short)
-        resp (if short {:url url :short short} {:err "Invalid URL to shorten"})]
+        resp (if short
+               {:url url :short short}
+               (if (nil? url) ;; different errors...
+                 {:err "Invalid Request"}
+                 {:err "Invalid URL to shorten"}))]
     {:status 200 :headers {"Content-Type" "application/json"} :body (json/write-str resp)}))
 
 (defn route-redirect [hash]
+  ;; TODO if there is no hash in store, do something else
   (let [url (first (first (urlstore/lookup-hash hash store)))]
     {:status 302 :headers {"Location" url} :body ""}))
 
@@ -43,11 +49,11 @@
 
 (defroutes app
   (GET "/" [] (route-home))
-  (GET "/:url-id" [url-id] (route-redirect url-id))
-  (GET "/new/:url" [url] (route-url url)))
+  (GET "/new" {url :params} (route-url (get url :url)))
+  (GET "/:url-id" [url-id] (route-redirect url-id)))
 
 (defn -main [& port]
   (let [port (Integer. (or port (env :port) 3000))]
     (println "HTTP Server starting on:" port)
-    (run-server (wrap-defaults app site-defaults) {:port port})))
+    (run-server (wrap-defaults #'app site-defaults) {:port port})))
 

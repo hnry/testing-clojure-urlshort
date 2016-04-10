@@ -9,6 +9,7 @@
                  [environ "1.0.2"]
                  [hiccup "1.0.5"]
                  [org.clojure/data.json "0.2.6"]
+                 [commons-validator "1.5.0"]
                  [ring/ring-defaults "0.2.0"]]
   :main ^:skip-aot urlshort.core
   :plugins [[lein-ring "0.9.7"]]

@@ -14,16 +14,23 @@
             (map char (range (int \A) (inc (int \Z))))
             (map char (range (int \a) (inc (int \z)))))))
 
+(def reserved-words
+  ["new"])
+
+(defn reserved?
+  [hash]
+  (boolean (some #(= (.toLowerCase hash) %) reserved-words)))
+
 (defn gen
   "Generates random hash"
   ([]
-   (let [min 1
+   (let [min 2
          max 5
          len (+ (.nextInt (java.util.Random.) (+ (- max min) 1)) min)]
      (gen "" len)))
   ([hash len]
    (if (= (count hash) len)
-     hash
+     (if (reserved? hash) (gen "" len) hash)
      (gen (str hash (char-src (.nextInt (java.util.Random.) (count char-src)))) len))))
 
 (defn hash
