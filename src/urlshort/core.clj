@@ -4,7 +4,7 @@
             [urlshort.hash :as urlhash]
             [urlshort.store :as urlstore]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [hiccup.core :as hiccup]
+            [selmer.parser :refer [render-file]]
             [clojure.data.json :as json]
             [environ.core :refer [env]]
             [org.httpkit.server :refer [run-server]])
@@ -38,19 +38,19 @@
     {:status 200 :headers {"Content-Type" "application/json"} :body (json/write-str resp)}))
 
 (defn route-redirect [hash]
-  ;; TODO if there is no hash in store, do something else
-  (let [url (first (first (urlstore/lookup-hash hash store)))]
+  (let [url (first (first (urlstore/lookup-hash hash store)))
+        url (if (nil? url) "/?flash=redirect" url)]
     {:status 302 :headers {"Location" url} :body ""}))
 
-(defn route-home []
-  (hiccup/html [:html
-                [:body
-                 [:h1 "url shortener"]]]))
+(defn route-home [flash]
+  (render-file "views/index.html" {:flash flash}))
 
 (defroutes app
-  (GET "/" [] (route-home))
+  (GET "/" {p :params} (route-home (get p :flash)))
   (GET "/new" {url :params} (route-url (get url :url)))
-  (GET "/:url-id" [url-id] (route-redirect url-id)))
+  (GET "/:url-id" [url-id] (route-redirect url-id))
+  (route/resources "/asset/")
+  (route/not-found "Not Found"))
 
 (defn -main [& port]
   (let [port (Integer. (or port (env :port) 3000))]
