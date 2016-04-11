@@ -1,18 +1,64 @@
 <!DOCTYPE html>
+<html>
 <head>
-    <title>url shortener</title>
+    <title>URL Shortener</title>
     <link rel="stylesheet" type="text/css" href="/asset/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300|Poiret+One' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
-    <h1>url shortener</h1>
+    <div class="wrapper">
+    <div class="bg"></div>
 
     {% if flash %}
-    <div>redirected</div>
+    <div class="redirect">The URL you tried is not known.</div>
     {% endif %}
 
-    url shortener service
+    <div class="hdr content">
+        <h1>URL Shortener</h1>
+    </div>
 
-    <script src="/asset/script.js">
+    <div class="sub-content">
+    <div class="content">
+        Create short URLs by sending a request to ->
+        <br />
+        <span class="code">http://url-shorter.herokuapp.com/new?url=<i>%url%</i></span>
+        <br />
+        (Where <i>%url%</i> is the url you would like to shorten.)
+        <p>The resulting output looks like:
+            <br />
+            <span class="example">{"url":"http://example.com","short":"1gO"}</span>
+        </p>
+    </div>
+
+    <div class="content">
+        Optionally you can create URLs using this form:
+        <br />
+        <textarea placeholder="http://example.com"></textarea>
+        <br />
+        <button>Create URL</button>
+    </div>
+
+    <div id="output-wrapper" class="content">
+    <div id="output" class="hide">
+        <div>
+            <h3>Request -></h3> http://url-shorter.herokuapp.com/new?url=<span id="output-url"></span>
+        </div>
+
+        <div class="buff-top">
+            <h3>Response -></h3>
+            <span id="output-resp"></span>
+        </div>
+
+        <div id="output-success" class="buff-top nodisplay">
+            http://url-shorter.herokuapp.com/<span id="output-newurl"></span>
+        </div>
+    </div>
+    </div>
+
+    </div>
+    </div>
+    <script src="//code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script src="/asset/script.js"></script>
 </body>
 </html>

@@ -1,3 +1,96 @@
 body {
-    font-family: Verdana;
+    font-family: "Roboto", sans-serif;
+    background-image: url("/asset/bg.png");
+    margin: 0;
+    font-size: 15px;
+}
+
+h1 {
+    font-family: "Poiret One", cursive;
+    font-size: 2.2em;
+    margin-top: 0;
+    border-radius: 15px;
+    background-color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.hdr {
+    padding-top: 50px;
+}
+
+.bg {
+    background-color: #aaa;
+    opacity: 0.7;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+}
+
+.content {
+    min-width: 300px;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.sub-content {
+    padding-top: 20px;
+    padding-bottom: 40px;
+    background-color: #eee;
+    box-shadow: 4px 9px 38px -5px rgba(0,0,0,0.75);
+}
+
+.code, .example {
+    font-family: Arial;
+    font-size: 0.95em;
+    background-color: #e4f7f6;
+}
+
+button, textarea {
+    font-family: "Roboto", sans-serif;
+}
+
+textarea {
+    min-width: 200px;
+    width: 90%;
+}
+
+button {
+    padding: 5px;
+    font-size: 1.1em;
+}
+
+#output-wrapper {
+    margin-top: 10px;
+}
+
+#output {
+    position: absolute;
+    z-index: 2;
+    background-color: #e4f7f6;
+    margin: 0 auto;
+    padding: 10px 25px 15px 25px;
+}
+
+#output h3 {
+    margin: 0 0 5px 0;
+}
+
+.buff-top {
+    margin-top: 10px;
+}
+
+.hide {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.nodisplay {
+    display: none;
+}
+
+.show {
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
 }
